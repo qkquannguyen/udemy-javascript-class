@@ -1,3 +1,4 @@
+// --- Lecture: Functions
 function calculateAge(yearOfBirth) {
     var currentYear = 2018;
     return currentYear - yearOfBirth; 
