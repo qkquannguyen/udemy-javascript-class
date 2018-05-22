@@ -10,3 +10,23 @@
  *  - JS is a prototype based language. Each and every JS Object, has a Prototype property.
  *  Therefore, every JS Object has a prototype property, making inheritance possible.
  */
+
+// --- Function Constructor
+var Person = function(name, yearOfBirth, job) {
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+}
+
+// Inheritance Example
+Person.prototype.calclateAge = function() {
+    console.log(2018 - this.yearOfBirth);
+};
+
+var john = new Person('John', 1990, 'teacher');
+var jane = new Person('Jane', 1969, 'designer');
+var mark = new Person('Mark', 1948, 'retired');
+
+john.calclateAge();
+jane.calclateAge();
+mark.calclateAge();
