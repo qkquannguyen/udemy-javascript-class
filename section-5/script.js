@@ -23,6 +23,8 @@ Person.prototype.calclateAge = function() {
     console.log(2018 - this.yearOfBirth);
 };
 
+Person.prototype.lastname = 'Smith';
+
 var john = new Person('John', 1990, 'teacher');
 var jane = new Person('Jane', 1969, 'designer');
 var mark = new Person('Mark', 1948, 'retired');
@@ -30,3 +32,25 @@ var mark = new Person('Mark', 1948, 'retired');
 john.calclateAge();
 jane.calclateAge();
 mark.calclateAge();
+
+console.log(john.lastname);
+console.log(jane.lastname);
+console.log(mark.lastname);
+
+// --- Lecture : Object.create
+var personPrototype = {
+    calclateAge : function() {
+        console.log(2018 - this.yearOfBirth);
+    }
+};
+
+var chris = Object.create(personPrototype);
+chris.name = 'Chris';
+chris.yearOfBirth = 1990;
+chris.job = 'professor';
+
+var tyler = Object.create(personPrototype, {
+    name : { value : 'Tyler'},
+    yearOfBirth : { value : 1969 },
+    job : { value : 'model' }
+});
