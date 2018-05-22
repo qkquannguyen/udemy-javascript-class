@@ -9,6 +9,8 @@
  *  - Inheritance : When one object is based on another object.
  *  - JS is a prototype based language. Each and every JS Object, has a Prototype property.
  *  Therefore, every JS Object has a prototype property, making inheritance possible.
+ *  - A Function is a instance of the object type. They behave like any other object.
+ *  - In JS, we have "First-Class Function"
  */
 
 // --- Function Constructor
@@ -54,3 +56,37 @@ var tyler = Object.create(personPrototype, {
     yearOfBirth : { value : 1969 },
     job : { value : 'model' }
 });
+
+// --- Lecture : Primitives vs. Objects
+var a = 23;
+var b = a;
+a = 46;
+console.log(a); // Prints 46
+console.log(b); // Prints 23
+
+// Object Example
+var someObject = {
+    name : 'John',
+    age : '26'
+};
+
+var someObject2 = someObject;
+someObject.age = 30;
+console.log(someObject.age);    // Prints 30
+console.log(someObject2.age);   // Prints 30
+
+// Function Example
+var age = 27;
+var myObject = {
+    name : 'Quan',
+    city : 'Dallas'
+};
+
+function changeObject (a , b) {
+    a = 30;
+    b.city = 'Austin';
+}
+
+changeObject(age, myObject);
+console.log(age);
+console.log(myObject.city);
