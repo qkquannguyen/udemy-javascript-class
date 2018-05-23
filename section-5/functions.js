@@ -33,3 +33,28 @@ var rates = arrayCalculation(ages, maxHeartRate);
 console.log(ages);
 console.log(fullAges);
 console.log(rates);
+
+// --- Lecture : Functions returning Functions
+function interviewQuestion(someJob) {
+    if (someJob === 'engineer') {
+        return function(someName) {
+            console.log(someName + ', what is a integer?');
+        }
+    }
+    else if (someJob === 'professor') {
+        return function(someName) {
+            console.log('What subject do you teach, ' + someName + '?');
+        }
+    } else {
+        return function(someName) {
+            console.log('Hello ' + someName + ', what do you do?');
+        }
+    }
+}
+
+var someProfessorQuestion = interviewQuestion('professor');
+var someEngineerQuestion = interviewQuestion('engineer');
+
+someProfessorQuestion('John');
+someEngineerQuestion('Quan');
+interviewQuestion('professor')('Maria');
