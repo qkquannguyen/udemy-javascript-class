@@ -37,4 +37,3 @@ function interviewQuestions(someJob) {
 // interviewQuestions('professor') : This will return the function in lines 24-33
 // ('Maria') : Is passed in function('someName') in Line 24
 interviewQuestions('professor')('Maria');
-
