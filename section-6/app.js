@@ -5,18 +5,42 @@
  *  - Modules : An important aspect to any robust application's architecture.
  *              Modules keep units of code for a project both cleanly seperated and oranized.
  *              It also encapsulate some data into privacy and expose others publicly.
- * - Data Encapsulation : Allows to hide implementation details from the outside scope. Only expose
+ *   - Data Encapsulation : Allows to hide implementation details from the outside scope. Only expose
  *                        the public interface, or APIs.
  */
 
- // --- Budget Controller -------------------------------------------------------------------------
+ // --- Budget Controller ---------------------------------------------------------------------------------------------------------------------------
 var budgetController = (function() {
+    // --- Expense Data Structure ------------------------------------------------------------------------------------------
+    var expenseData = function(id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
 
+    // --- Income Data Structure -------------------------------------------------------------------------------------------
+    var incomeData = function(id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+    // --- Budgety Application Data Structure ------------------------------------------------------------------------------
+    var budgetyData = {
+        allItems : {
+            expenses : [],
+            incomes : []
+        },
+        totals : {
+            expenses : 0,
+            incomes : 0
+        }
+    }
 })();
 
-// --- UI Controller ------------------------------------------------------------------------------
+// --- UI Controller --------------------------------------------------------------------------------------------------------------------------------
 var UIController = (function() {
-    // --- Constants -----------------------------------------------------
+    // --- Constants --------------------------------------------------------------------------------------------------------------------------------
     var constantDOMStrings = {
         inputType        : '.add__type',
         inputDescription : '.add__description',
@@ -39,11 +63,11 @@ var UIController = (function() {
     };
 })();
 
-// --- Global Application Controller --------------------------------------------------------------
+// --- Global Application Controller ----------------------------------------------------------------------------------------------------------------
 var applicationController = (function(budgetControl, UIControl) {
-    // --- Function : Event Listeners ------------------------------------
+    // --- Function : Event Listeners ---------------------------------------------------------------------------------------------------------------
     var setupEventListeners = function() {
-        // --- Constants ------------------------
+        // --- Constants ----------------------------------------------------------------------------------------------------------------------------
         var constantDOMValues = UIControl.getConstantDOMStrings();
         var constantEvents = {
             click    : 'click',
@@ -62,7 +86,7 @@ var applicationController = (function(budgetControl, UIControl) {
         });
     }
 
-    // --- Function : Add Items ------------------------------------------
+    // --- Function : Add Items ---------------------------------------------------------------------------------------------------------------------
     var applicationControlAddItem = function() {
         var input = UIControl.getInput();
         console.log(input);
