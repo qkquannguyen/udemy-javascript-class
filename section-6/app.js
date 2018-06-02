@@ -16,6 +16,7 @@ var budgetController = (function() {
         this.id = id;
         this.description = description;
         this.value = value;
+        this.percentage = -1;
     };
 
     // --- Income Data Structure ------------------------------------------------------------------
@@ -28,14 +29,44 @@ var budgetController = (function() {
     // --- Budgety Application Data Structure -----------------------------------------------------
     var budgetyData = {
         allItems : {
-            expenses : [],
-            incomes : []
+            expense : [],
+            income  : []
         },
         totals : {
-            expenses : 0,
-            incomes : 0
+            expense : 0,
+            income  : 0
         }
-    }
+    };
+
+    return {
+        addItem : function(type, des, val) {
+            var newItem, ID;
+            
+            // --- Create a new ID for a new 
+            if (budgetyData.allItems[type].length > 0) {
+                ID = budgetyData.allItems[type][budgetyData.allItems[type].length - 1].id + 1;
+            } else {
+                ID = 0;
+            }
+
+            // --- Create a new item based on a income or expense type
+            if (type === 'expense') {
+                newItem = new expenseData(ID, des, val);
+            } 
+            else if (type === 'income') {
+                newItem = new incomeData(ID, des, val)
+            }
+
+            // --- Push the data to our Budgety Data Structure
+            budgetyData.allItems[type].push(newItem);
+
+            // --- Return the new element
+            return newItem;
+        },
+        testing : function() {
+            console.log(budgetyData);
+        }
+    };
 })();
 
 // --- UI Controller ------------------------------------------------------------------------------
@@ -88,10 +119,11 @@ var applicationController = (function(budgetControl, UIControl) {
 
     // --- Function : Add Items -------------------------------------------------------------------
     var applicationControlAddItem = function() {
-        var input = UIControl.getInput();
-        console.log(input);
-
-        // 2. Add item to budget controller
+        // --- Constants --------------------------------------------------------------------------
+        var input, newItem;
+        
+        input = UIControl.getInput();
+        newItem = budgetControl.addItem(input.type, input.description, input.value);
         // 3. Add item to UI
         // 4. Calculcate Budget
         // 5. Display on UI
