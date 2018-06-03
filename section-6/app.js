@@ -74,8 +74,8 @@ var UIController = (function () {
         inputDescription: '.add__description',
         inputValue      : '.add__value',
         inputButton     : '.add__btn',
-        incomeContainer : 'income__list',
-        expenseContainer: 'expenses__list'
+        incomeContainer : '.income__list',
+        expenseContainer: '.expenses__list'
     };
 
     return {
@@ -105,7 +105,7 @@ var UIController = (function () {
             newHtml = newHtml.replace('%value%', obj.value);
 
             // Insert the HTML into the DOM
-            document.querySelector(element).insertAdjacentHTML('beforehand', newHtml);
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
         getConstantDOMStrings: function () {
             return constantDOMStrings;
