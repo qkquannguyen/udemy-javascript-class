@@ -9,10 +9,10 @@
  *                        the public interface, or APIs.
  */
 
- // --- Budget Controller -------------------------------------------------------------------------
-var budgetController = (function() {
+// --- Budget Controller --------------------------------------------------------------------------
+var budgetController = (function () {
     // --- Expense Data Structure -----------------------------------------------------------------
-    var expenseData = function(id, description, value) {
+    var expenseData = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
@@ -20,7 +20,7 @@ var budgetController = (function() {
     };
 
     // --- Income Data Structure ------------------------------------------------------------------
-    var incomeData = function(id, description, value) {
+    var incomeData = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
@@ -28,20 +28,21 @@ var budgetController = (function() {
 
     // --- Budgety Application Data Structure -----------------------------------------------------
     var budgetyData = {
-        allItems : {
-            expense : [],
-            income  : []
+        allItems: {
+            expense: [],
+            income: []
         },
-        totals : {
-            expense : 0,
-            income  : 0
+        totals: {
+            expense: 0,
+            income: 0
         }
     };
 
+    // --- Budgety Application Data Population ----------------------------------------------------
     return {
-        addItem : function(type, des, val) {
+        addItem: function (type, des, val) {
             var newItem, ID;
-            
+
             // --- Create a new ID for a new 
             if (budgetyData.allItems[type].length > 0) {
                 ID = budgetyData.allItems[type][budgetyData.allItems[type].length - 1].id + 1;
@@ -52,8 +53,7 @@ var budgetController = (function() {
             // --- Create a new item based on a income or expense type
             if (type === 'expense') {
                 newItem = new expenseData(ID, des, val);
-            } 
-            else if (type === 'income') {
+            } else if (type === 'income') {
                 newItem = new incomeData(ID, des, val)
             }
 
@@ -62,54 +62,69 @@ var budgetController = (function() {
 
             // --- Return the new element
             return newItem;
-        },
-        testing : function() {
-            console.log(budgetyData);
         }
     };
 })();
 
 // --- UI Controller ------------------------------------------------------------------------------
-var UIController = (function() {
+var UIController = (function () {
     // --- Constants ------------------------------------------------------------------------------
     var constantDOMStrings = {
-        inputType        : '.add__type',
-        inputDescription : '.add__description',
-        inputValue       : '.add__value',
-        inputButton      : '.add__btn'
+        inputType       : '.add__type',
+        inputDescription: '.add__description',
+        inputValue      : '.add__value',
+        inputButton     : '.add__btn',
+        incomeContainer : 'income__list',
+        expenseContainer: 'expenses__list'
     };
 
     return {
-        getInput : function() {
+        getInput: function () {
             return {
-                type        : document.querySelector(constantDOMStrings.inputType).value,
-                description : document.querySelector(constantDOMStrings.inputDescription).value,
-                value       : document.querySelector(constantDOMStrings.inputValue).value
+                type: document.querySelector(constantDOMStrings.inputType).value,
+                description: document.querySelector(constantDOMStrings.inputDescription).value,
+                value: document.querySelector(constantDOMStrings.inputValue).value
             };
         },
+        addListItem: function (obj, type) {
+            var html, newHtml, element;
 
-        getConstantDOMStrings : function() {
+            // Create HTML String with placeholder text
+            if (type === 'expense') {
+                element = constantDOMStrings.expenseContainer;
+                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }
+            else if (type === 'income') {
+                element = constantDOMStrings.incomeContainer;
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }
+
+            // Replace the placeholder text with some actual data
+            newHtml = html.replace('%id%', obj.id);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+
+            // Insert the HTML into the DOM
+            document.querySelector(element).insertAdjacentHTML('beforehand', newHtml);
+        },
+        getConstantDOMStrings: function () {
             return constantDOMStrings;
         }
     };
 })();
 
 // --- Global Application Controller --------------------------------------------------------------
-var applicationController = (function(budgetControl, UIControl) {
+var applicationController = (function (budgetControl, UIControl) {
     // --- Function : Event Listeners -------------------------------------------------------------
-    var setupEventListeners = function() {
+    var setupEventListeners = function () {
         // --- Constants --------------------------------------------------------------------------
         var constantDOMValues = UIControl.getConstantDOMStrings();
-        var constantEvents = {
-            click    : 'click',
-            keypress : 'keypress'
-        }
 
         // Case 1 : If a person clicks the button with a mouse, the button should click
-        document.querySelector(constantDOMValues.inputButton).addEventListener(constantEvents.click, applicationControlAddItem);
+        document.querySelector(constantDOMValues.inputButton).addEventListener('click', applicationControlAddItem);
 
         // Case 2 : If a person presses the 'ENTER' key on the keyboard, the button should click
-        document.addEventListener(constantEvents.keypress, function (event) {
+        document.addEventListener('keypress', function (event) {
             // Event : Accounts for the case when the user presses "ENTER" on the keyboard
             if (event.keyCode === 13 || event.which === 13) {
                 applicationControlAddItem();
@@ -118,19 +133,19 @@ var applicationController = (function(budgetControl, UIControl) {
     }
 
     // --- Function : Add Items -------------------------------------------------------------------
-    var applicationControlAddItem = function() {
+    var applicationControlAddItem = function () {
         // --- Constants --------------------------------------------------------------------------
         var input, newItem;
-        
+
         input = UIControl.getInput();
         newItem = budgetControl.addItem(input.type, input.description, input.value);
-        // 3. Add item to UI
+        UIControl.addListItem(newItem, input.type);
         // 4. Calculcate Budget
         // 5. Display on UI
     }
 
     return {
-        init : function() {
+        init: function () {
             console.log('Application has started!');
             setupEventListeners();
         }
