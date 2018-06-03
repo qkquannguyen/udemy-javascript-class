@@ -5,7 +5,7 @@
  *  - Modules : An important aspect to any robust application's architecture.
  *              Modules keep units of code for a project both cleanly seperated and oranized.
  *              It also encapsulate some data into privacy and expose others publicly.
- *   - Data Encapsulation : Allows to hide implementation details from the outside scope. Only expose
+ *  - Data Encapsulation : Allows to hide implementation details from the outside scope. Only expose
  *                        the public interface, or APIs.
  */
 
@@ -107,6 +107,18 @@ var UIController = (function () {
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
+        clearFields : function () {
+            var itemField, itemFieldArray;
+            
+            itemField = document.querySelectorAll(constantDOMStrings.inputDescription + ', ' + constantDOMStrings.inputValue);
+            itemFieldArray = Array.prototype.slice.call(itemField);
+
+            // Three Arguments : Current Element, Current Index, and Original Array (Fields Array)
+            itemFieldArray.forEach(function (current, index, array) {
+                current.value = "";
+            });
+            itemFieldArray[0].focus();
+        },
         getConstantDOMStrings: function () {
             return constantDOMStrings;
         }
@@ -137,11 +149,19 @@ var applicationController = (function (budgetControl, UIControl) {
         // --- Constants --------------------------------------------------------------------------
         var input, newItem;
 
+        // 1. Get Field Input Data from the User
         input = UIControl.getInput();
+
+        // 2. Add Items to go to the Budget Controller
         newItem = budgetControl.addItem(input.type, input.description, input.value);
+        
+        // 3. Add the items to the Budgety UI
         UIControl.addListItem(newItem, input.type);
-        // 4. Calculcate Budget
-        // 5. Display on UI
+
+        // 4. Clear Fields
+        UIControl.clearFields();
+        // 5. Calculcate Budget
+        // 6. Display on UI
     }
 
     return {
