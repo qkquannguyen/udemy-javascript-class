@@ -7,6 +7,13 @@
  *              It also encapsulate some data into privacy and expose others publicly.
  *  - Data Encapsulation : Allows to hide implementation details from the outside scope. Only expose
  *                        the public interface, or APIs.
+ *  - Event Bubbling : When an event is fired or triggered on some DOM Element, 
+ *                     then the exact same event is triggered on all parent elements.
+ *  - Target Element : Element on which the event was actually first fired, 
+ *                     so the element that caused the event to happen. (Ex. A Button click)
+ *  - Event Delegation : When we know where the event was fired, then attach an event handler
+ *                       to a parent element and wait for the event to bubble up, then do whatever
+ *                       that was intended to do.
  */
 
 // --- Budget Controller --------------------------------------------------------------------------
