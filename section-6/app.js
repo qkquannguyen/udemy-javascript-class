@@ -26,6 +26,15 @@ var budgetController = (function () {
         this.value = value;
     };
 
+    var calculateTotal = function (type) {
+        var sum = 0;
+
+        budgetyData.allItems[type].forEach(function(currentElement) {
+            sum += currentElement.value;
+        });
+        budgetyData.totals[type] = sum;
+    };
+
     // --- Budgety Application Data Structure -----------------------------------------------------
     var budgetyData = {
         allItems: {
@@ -35,11 +44,14 @@ var budgetController = (function () {
         totals: {
             expense: 0,
             income: 0
-        }
+        },
+        budget : 0,
+        percentage : -1
     };
 
     // --- Budgety Application Data Population ----------------------------------------------------
     return {
+        // --- Function : Add Items ---------------------------------------------------------------
         addItem: function (type, des, val) {
             var newItem, ID;
 
@@ -62,6 +74,34 @@ var budgetController = (function () {
 
             // --- Return the new element
             return newItem;
+        },
+        // --- Function : Calculates Budget -------------------------------------------------------
+        calculateBudget : function () {
+            // Should Calculate the Total Income and Expense
+            calculateTotal('expense');
+            calculateTotal('income');
+
+            // Budget : Income - Expenses
+            budgetyData.budget = budgetyData.totals.income - budgetyData.totals.expense;
+
+            // Percentage of Income Spent Calculation : Expense / Income
+            if (budgetyData.totals.income > 0) {
+                budgetyData.percentage = Math.round((budgetyData.totals.expense / budgetyData.totals.income) * 100);
+            } else {
+                budgetyData.percentage = -1;
+            }
+        },
+        // --- Function : Get Budget --------------------------------------------------------------
+        getBudget : function () {
+            return {
+                budget      : budgetyData.budget,
+                totalIncome : budgetyData.totals.income,
+                totalExpense: budgetyData.totals.expense,
+                percentage  : budgetyData.percentage
+            }
+        },
+        testing : function () {
+            console.log(budgetyData);
         }
     };
 })();
@@ -79,6 +119,7 @@ var UIController = (function () {
     };
 
     return {
+        // --- Function : Get Input ---------------------------------------------------------------
         getInput: function () {
             return {
                 type: document.querySelector(constantDOMStrings.inputType).value,
@@ -86,6 +127,7 @@ var UIController = (function () {
                 value: parseFloat(document.querySelector(constantDOMStrings.inputValue).value)
             };
         },
+        // --- Function : Add Item to List depending on Types -------------------------------------
         addListItem: function (obj, type) {
             var html, newHtml, element;
 
@@ -107,6 +149,7 @@ var UIController = (function () {
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
+        // --- Function : Clear Fields ------------------------------------------------------------
         clearFields : function () {
             var itemField, itemFieldArray;
             
@@ -119,6 +162,7 @@ var UIController = (function () {
             });
             itemFieldArray[0].focus();
         },
+        // --- Function : Get DOM Constants -------------------------------------------------------
         getConstantDOMStrings: function () {
             return constantDOMStrings;
         }
@@ -144,13 +188,18 @@ var applicationController = (function (budgetControl, UIControl) {
         });
     }
 
+    // --- Function : Updates the User's Budget ---------------------------------------------------
     var updateBudget = function() {
         // 1. Calculate the Budget
+        budgetControl.calculateBudget();
 
         // 2. Return the Budget
+        var budget = budgetControl.getBudget();
 
         // 3. Display the budget on the UI
+        console.log(budget);
     };
+
     // --- Function : Add Items -------------------------------------------------------------------
     var applicationControlAddItem = function () {
         // --- Constants --------------------------------------------------------------------------
