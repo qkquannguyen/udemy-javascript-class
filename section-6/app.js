@@ -98,7 +98,7 @@ var budgetController = (function () {
                 totalIncome : budgetyData.totals.income,
                 totalExpense: budgetyData.totals.expense,
                 percentage  : budgetyData.percentage
-            }
+            };
         },
         testing : function () {
             console.log(budgetyData);
@@ -115,7 +115,11 @@ var UIController = (function () {
         inputValue      : '.add__value',
         inputButton     : '.add__btn',
         incomeContainer : '.income__list',
-        expenseContainer: '.expenses__list'
+        expenseContainer: '.expenses__list',
+        budgetLabel     : '.budget__value',
+        incomeLabel     : '.budget__income--value',
+        expenseLabel    : '.budget__expenses--value',
+        percentageLabel : '.budget__expenses--percentage'
     };
 
     return {
@@ -162,6 +166,18 @@ var UIController = (function () {
             });
             itemFieldArray[0].focus();
         },
+        // --- Function : Display the Budget to UI ------------------------------------------------
+        displayBudget : function (obj) {
+            document.querySelector(constantDOMStrings.budgetLabel).textContent = obj.budget;
+            document.querySelector(constantDOMStrings.incomeLabel).textContent = obj.totalIncome;
+            document.querySelector(constantDOMStrings.expenseLabel).textContent = obj.totalExpense;
+
+            if (obj.percentage > 0) {
+                document.querySelector(constantDOMStrings.percentageLabel).textContent = obj.percentage + '%';
+            } else {
+                document.querySelector(constantDOMStrings.percentageLabel).textContent = '---';
+            }
+        },
         // --- Function : Get DOM Constants -------------------------------------------------------
         getConstantDOMStrings: function () {
             return constantDOMStrings;
@@ -197,7 +213,7 @@ var applicationController = (function (budgetControl, UIControl) {
         var budget = budgetControl.getBudget();
 
         // 3. Display the budget on the UI
-        console.log(budget);
+        UIControl.displayBudget(budget);
     };
 
     // --- Function : Add Items -------------------------------------------------------------------
@@ -226,6 +242,12 @@ var applicationController = (function (budgetControl, UIControl) {
     return {
         init: function () {
             console.log('Application has started!');
+            UIControl.displayBudget({
+                budget      : 0,
+                totalIncome : 0,
+                totalExpense: 0,
+                percentage  : -1
+            });
             setupEventListeners();
         }
     }
