@@ -83,7 +83,7 @@ var UIController = (function () {
             return {
                 type: document.querySelector(constantDOMStrings.inputType).value,
                 description: document.querySelector(constantDOMStrings.inputDescription).value,
-                value: document.querySelector(constantDOMStrings.inputValue).value
+                value: parseFloat(document.querySelector(constantDOMStrings.inputValue).value)
             };
         },
         addListItem: function (obj, type) {
@@ -144,6 +144,13 @@ var applicationController = (function (budgetControl, UIControl) {
         });
     }
 
+    var updateBudget = function() {
+        // 1. Calculate the Budget
+
+        // 2. Return the Budget
+
+        // 3. Display the budget on the UI
+    };
     // --- Function : Add Items -------------------------------------------------------------------
     var applicationControlAddItem = function () {
         // --- Constants --------------------------------------------------------------------------
@@ -152,16 +159,19 @@ var applicationController = (function (budgetControl, UIControl) {
         // 1. Get Field Input Data from the User
         input = UIControl.getInput();
 
+        if (input.description && !isNaN(input.value) && input.value > 0) {
         // 2. Add Items to go to the Budget Controller
-        newItem = budgetControl.addItem(input.type, input.description, input.value);
-        
-        // 3. Add the items to the Budgety UI
-        UIControl.addListItem(newItem, input.type);
+            newItem = budgetControl.addItem(input.type, input.description, input.value);
+            
+            // 3. Add the items to the Budgety UI
+            UIControl.addListItem(newItem, input.type);
 
-        // 4. Clear Fields
-        UIControl.clearFields();
-        // 5. Calculcate Budget
-        // 6. Display on UI
+            // 4. Clear Fields
+            UIControl.clearFields();
+
+            // 5. Calculate and Update the Budget
+            updateBudget();
+        }
     }
 
     return {
