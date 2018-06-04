@@ -14,6 +14,10 @@
  *  - Event Delegation : When we know where the event was fired, then attach an event handler
  *                       to a parent element and wait for the event to bubble up, then do whatever
  *                       that was intended to do.
+ *      - When to use Event Delegation
+ *           I. When we have an element with lots of child elements that we are interested in.
+ *          II. When we want an event handler attatched to an element that is not yet in the DOM
+ *              when the page is loaded.
  */
 
 // --- Budget Controller --------------------------------------------------------------------------
