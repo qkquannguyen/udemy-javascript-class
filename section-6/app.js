@@ -130,7 +130,8 @@ var UIController = (function () {
         budgetLabel     : '.budget__value',
         incomeLabel     : '.budget__income--value',
         expenseLabel    : '.budget__expenses--value',
-        percentageLabel : '.budget__expenses--percentage'
+        percentageLabel : '.budget__expenses--percentage',
+        container       : '.container'
     };
 
     return {
@@ -213,6 +214,8 @@ var applicationController = (function (budgetControl, UIControl) {
                 applicationControlAddItem();
             }
         });
+
+        document.querySelector(constantDOMValues.container).addEventListener('click', applicationControlDeleteItem);
     }
 
     // --- Function : Updates the User's Budget ---------------------------------------------------
@@ -249,6 +252,28 @@ var applicationController = (function (budgetControl, UIControl) {
             updateBudget();
         }
     }
+
+    // --- Function Delete Items ------------------------------------------------------------------
+    var applicationControlDeleteItem = function (event) {
+        // --- Constants --------------------------------------------------------------------------
+        var itemId, splittedItemId, type, Id;
+
+        itemId = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+        if (itemId) {
+            // itemId : income-# or expense-#
+            // type   : income or expense
+            // id     : a number
+            splittedItemId = itemId.split('-');
+            type = splittedItemId[0];
+            Id = splittedItemId[1];
+
+            // --- TODO:
+            // 1. Delete the item from the Data Structure
+            // 2. Delete the item from the UI
+            // 3. Update and show the new Budget
+        } 
+    };
 
     return {
         init: function () {
